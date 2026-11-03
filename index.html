@@ -43,6 +43,7 @@ aside .card{padding:10px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:700px){.two{grid-template-columns:1fr}}
 .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}@media(max-width:600px){.loop{grid-template-columns:1fr 1fr}}
 .loop div{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--tierra);border-radius:8px;padding:8px;font-size:12.5px}
+main{min-width:0}@media(max-width:700px){table{display:block;overflow-x:auto}}
 footer{max-width:1180px;margin:auto;padding:0 16px 30px;color:var(--mute);font-size:12px}
 </style>
 </head>
@@ -56,6 +57,7 @@ footer{max-width:1180px;margin:auto;padding:0 16px 30px;color:var(--mute);font-s
 <button data-t="contenido">Contenido</button>
 <button data-t="lingo">Lingo</button>
 <button data-t="cambios">Cambios</button>
+<button data-t="auditoria">Auditoría</button>
 </nav>
 <div class="wrap">
 <main>
@@ -221,6 +223,70 @@ footer{max-width:1180px;margin:auto;padding:0 16px 30px;color:var(--mute);font-s
 <tr><td>¿Necesitamos otro agente?</td><td>Sí, uno: el CRÍTICO. Reemplaza a otro, no suma</td></tr>
 </table>
 </section>
+
+<!-- ============ AUDITORÍA ============ -->
+<section id="auditoria">
+<h2>La conclusión en una línea</h2>
+<div class="card" style="border-left:5px solid var(--fuego)"><b style="font-size:17px">OLLIN está puliendo la máquina, no el resultado.</b><div class="s" style="margin-top:4px">Se armaron 25 agentes y 121 trabajos antes de cerrar una venta o de volver a publicar un episodio de Lingo.</div></div>
+
+<div class="grid" style="margin-top:10px">
+<div class="card"><div class="k r">0</div><div class="s">ventas en 18 días</div></div>
+<div class="card"><div class="k r">0</div><div class="s">conversaciones con negocios anotadas</div></div>
+<div class="card"><div class="k r">0</div><div class="s">episodios de Lingo publicados desde el 28-oct</div></div>
+<div class="card"><div class="k t">+100</div><div class="s">preguntas que te hizo la oficina (53 sí, 21 corrige)</div></div>
+</div>
+
+<h2>¿A dónde se fue el esfuerzo?</h2>
+<div class="two">
+<div class="card"><h3>Tokens medidos (millones)</h3><div class="chart"><canvas id="cEsf"></canvas></div><div class="s">Dirección = arreglar la oficina, reglas y documentos. Lingo = producir PL-021 (aún sin publicar).</div></div>
+<div class="card"><h3>Lo que más falla (veces que se vio)</h3><div class="chart"><canvas id="cFal"></canvas></div></div>
+</div>
+
+<h2>Huecos y fallos, por gravedad</h2>
+<table>
+<tr><th>Gravedad</th><th>Qué</th><th>Por qué importa</th></tr>
+<tr><td><span class="tag no">alta</span></td><td>Nadie habla con clientes y nada se anota</td><td>Sin conversaciones no hay venta ni aprendizaje</td></tr>
+<tr><td><span class="tag no">alta</span></td><td>Lingo sin publicar 6 días; 9 rondas en un episodio</td><td>El algoritmo premia la constancia; perfeccionar no da vistas</td></tr>
+<tr><td><span class="tag no">alta</span></td><td>Todo depende de 1 laptop y 2 Chrome abiertos</td><td>Si no estás, se atora (DIFUSIÓN 0 de 5)</td></tr>
+<tr><td><span class="tag md">media</span></td><td>Se mide lo que no paga: tokens al día, no ventas</td><td>El plan de Claude es fijo; medir tokens también gasta tokens</td></tr>
+<tr><td><span class="tag md">media</span></td><td>25 agentes para 0 clientes</td><td>Cada regla y cada agente se carga en cada chat (arranque ~0.5 M)</td></tr>
+<tr><td><span class="tag md">media</span></td><td>Oferta cambió 4 veces sin hablar con un cliente</td><td>Se decide con suposiciones, no con lo que dice el dueño</td></tr>
+<tr><td><span class="tag md">media</span></td><td>Competencia vista sin método (3 en la web)</td><td>No sabes contra quién ni por qué te eligen</td></tr>
+<tr><td><span class="tag gr">baja</span></td><td>Documentos viejos (OLLIN 18-oct, Lingo 30-sep)</td><td>Ya tiene dueño: cierre del viernes + CRÍTICO</td></tr>
+</table>
+
+<h2>Las preguntas fundamentales</h2>
+<table>
+<tr><th>Pregunta</th><th>Respuesta con datos</th></tr>
+<tr><td>¿Para qué existe Contenido?</td><td>Para vender. Hoy: 0 ventas y 0 conversaciones anotadas. No sabemos si el problema es la oferta, el canal o el precio.</td></tr>
+<tr><td>¿Quién compra y lo hemos validado?</td><td>Dueños de negocios chicos de comida. No validado: ningún dueño ha dicho con sus palabras qué quiere.</td></tr>
+<tr><td>¿El canal es el correcto?</td><td>Facebook personal + anuncio: 104 visitas → 0 mensajes. Un servicio local se cierra en persona y por WhatsApp.</td></tr>
+<tr><td>¿Para qué existe Lingo?</td><td>Más audiencia. Su mejor señal: el % visto (los de 30 % son los de más vistas). Hoy no se publica.</td></tr>
+<tr><td>¿Por qué cayó Lingo?</td><td>Hueco. Hipótesis: el gancho de PL-019 (10 % visto) y que la serie dejó de salir seguido.</td></tr>
+<tr><td>¿Cuánta oficina hace falta?</td><td>La mínima que sostenga la meta. Hoy hay más agentes que trabajo real.</td></tr>
+<tr><td>¿Las tareas solas sirven?</td><td>Las que no usan Chrome, sí (ANALISTA, cierre). Las que usan Chrome fallan más de la mitad.</td></tr>
+<tr><td>¿Medimos lo correcto?</td><td>No: mucho gasto de tokens, nada de embudo de venta. El dinero que sale es fijo ($1,800).</td></tr>
+<tr><td>¿Quién decide los ajustes?</td><td>Desde hoy: el CRÍTICO propone con datos y tú das un sí por semana.</td></tr>
+<tr><td>¿Qué pasa si no hay ventas al 30-nov?</td><td>Se pierden $1,800 al mes sin aprender por qué. Por eso lo primero es anotar.</td></tr>
+</table>
+
+<h2>Qué hacer: 2 semanas en modo resultado</h2>
+<div class="loop"><div style="border-top-color:var(--agua)"><b>Contenido</b><br>10 conversaciones anotadas y 1 venta</div><div style="border-top-color:var(--fuego)"><b>Lingo</b><br>Publicar PL-020 y PL-021 y medir 48 h</div><div style="border-top-color:var(--tierra)"><b>Oficina</b><br>Congelada: sólo se arregla lo que se rompa</div><div><b>Revisión</b><br>Lun 16-nov: el CRÍTICO dice si funcionó</div></div>
+
+<h2>Los accionables</h2>
+<table>
+<tr><th>#</th><th>Qué</th><th>Quién</th><th>Cuándo</th><th>Cómo sabremos que funcionó</th></tr>
+<tr><td>1</td><td>Visitar 10 negocios con la hoja «así se vería tu negocio» y anotar sus palabras</td><td>Tú (2 min por visita en el registro)</td><td>al 14-nov</td><td>10 renglones en el registro</td></tr>
+<tr><td>2</td><td>Oferta de entrada: 1 pieza de prueba barata para abrir la puerta</td><td>OFERTA propone · tú decides</td><td>6-nov</td><td>3 sí de 10 visitas</td></tr>
+<tr><td>3</td><td>Publicar en Facebook tú desde el celular con la pieza lista (DIFUSIÓN prepara)</td><td>DIFUSIÓN + tú</td><td>desde 4-nov</td><td>5 de 5 publicaciones a tiempo</td></tr>
+<tr><td>4</td><td>Lingo: publicar PL-020 y PL-021 sin más rondas</td><td>Chat de Lingo + tú (abrir el PR)</td><td>al 7-nov</td><td>2 episodios arriba</td></tr>
+<tr><td>5</td><td>Lingo: probar un gancho de 3 s y una versión de 60 s</td><td>GUIONISTA + SUPERVISOR</td><td>PL-022</td><td>% visto ≥ 25 %</td></tr>
+<tr><td>6</td><td>Congelar la oficina: sin agentes, reglas ni páginas nuevas</td><td>Dirección</td><td>al 16-nov</td><td>tokens de dirección &lt; 20 % del total</td></tr>
+<tr><td>7</td><td>Gasto de tokens: del reporte diario a 1 por semana</td><td>ANALISTA</td><td>desde 9-nov</td><td>la misma decisión con menos reportes</td></tr>
+<tr><td>8</td><td>Competencia: 5 diseñadores de Monterrey en Facebook (precio, qué entregan, reseñas)</td><td>CRÍTICO (1.ª revisión)</td><td>9-nov</td><td>tabla de 5 con tu posición</td></tr>
+</table>
+<div class="s">Todos se pueden deshacer. El 1, el 3 y el 4 necesitan de ti; los demás los hace la oficina.</div>
+</section>
 </main>
 
 <aside><div class="card"><h3>¿Por qué existe cada cosa?</h3><div class="s">Naranja: lo pediste tú · Verde: lo decidió Claude</div><div id="why"></div></div></aside>
@@ -232,7 +298,8 @@ const W={
 oficina:[["g","Una oficina visual","«En los chats me pierdo y no veo el avance» (19-oct)."],["g","Agentes en su cuarto","Sólo se mueven cuando trabajan; si no, confunde (23-oct)."],["g","Medir los tokens","Saber qué gasta y cómo gastar menos (22-oct)."],["g","Un chat por piso","Que cada chat hable sólo de su proyecto (19-oct)."],["c","Claude como cerebro","Costo fijo y nada que programar; otras opciones piden armar flujos."],["c","La huella como prueba","Una tarea que dice «corrió» puede no haber hecho nada."],["g","Alguien que cuestione","«No quiero que todo dependa de mí» (3-nov)."]],
 contenido:[["g","Precios $600 / $350","Aprobados el 28-oct; mitad al empezar, mitad al entregar."],["g","Producto real","Tras burlas por verse IA, sólo negocios y comida reales (29-oct)."],["g","No pausar","«Enderezar la flecha»: seguir y ajustar con datos (3-nov)."],["c","Meta: ventas","Lo único que paga el proyecto; lo demás es medio."],["c","Registro n.º 1","Sin él no hay embudo ni ROI."],["c","VERIFICADOR obligatorio","Salieron 14 anuncios sin revisar."]],
 lingo:[["g","Lingo dentro de OLLIN","Se lee y se ajusta desde dirección (3-nov)."],["g","Personas animadas","Le gustan más que las realistas (28-oct)."],["c","Meta: audiencia","Es lo que mide si la serie crece."],["c","Tope de 3 rondas","PL-021 llevó 9 rondas y 111 M en 2 días."],["c","Revisar el gancho","Los de 30 % visto son los de más vistas."]],
-cambios:[["g","Auditar antes de documentar","Eligió: auditar → ajustar → documentar (3-nov)."],["g","Página sin cuenta","Para presentarlo sin pedir inicio de sesión."],["c","CRÍTICO en lugar del INVESTIGADOR","Una tarea menos, no una más."],["c","48 h y se aplica","Para no depender de que tengas tiempo."],["c","Plan B sin Chrome","Es la causa n.º 1 de las fallas."]]};
+cambios:[["g","Auditar antes de documentar","Eligió: auditar → ajustar → documentar (3-nov)."],["g","Página sin cuenta","Para presentarlo sin pedir inicio de sesión."],["c","CRÍTICO en lugar del INVESTIGADOR","Una tarea menos, no una más."],["c","48 h y se aplica","Para no depender de que tengas tiempo."],["c","Plan B sin Chrome","Es la causa n.º 1 de las fallas."]],
+auditoria:[["g","Analizar y proponer","«Esta info revela huecos: hazte preguntas fundamentales y propón accionables» (3-nov)."],["g","No pausar","«Enderezar la flecha» con datos (3-nov)."],["c","Modo resultado","El esfuerzo se fue a la máquina; 2 semanas sólo a vender y publicar."],["c","Congelar la oficina","Cada agente y cada regla encarecen todos los chats."],["c","Publicar tú desde el celular","La publicación automática falló 5 de 5; tú ya lo haces el fin de semana."],["c","Hablar con dueños","Ninguna decisión de la oferta salió de un cliente."]]};
 function why(t){document.getElementById('why').innerHTML=W[t].map(([w,a,b])=>`<div class="why ${w=='c'?'c':''}"><span class="who" style="color:${w=='c'?'var(--agua)':'var(--tierra)'}">${w=='c'?'CLAUDE':'GAEL'}</span> · <b>${a}</b><br>${b}</div>`).join('')}
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tabs button,section').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById(b.dataset.t).classList.add('on');why(b.dataset.t);try{localStorage.setItem('tab',b.dataset.t)}catch(e){}});
 const AC=[["DIFUSIÓN","atorado","Publica en Facebook","0 de 5 solas"],["VERIFICADOR","libre","Revisa antes de entregar","sin trabajar desde 20-oct"],["DISEÑADORA / CONTENIDO","listo","Hace las piezas","9 publicadas"],["OFERTA","listo","Precios y paquetes","62 % de sí"],["CLIENTE","listo","Prospectos","registro vacío"],["NEGOCIO","listo","Meta de ventas","0 de 1.33 por semana"],["VENTA","listo","Cobra y registra","sin medida"],["ANALISTA","listo","Gasto y alertas","2 de 2 a tiempo"],["ORGANIZADOR","listo","Cierre del viernes","hecho 30-oct"],["CRÍTICO","nuevo","Cuestiona y propone","desde 9-nov"],["JEFE","listo","Dirige el piso","31 sí · 12 corrige"],["VIDEASTA","juntado","Videos","con CONTENIDO"]];
@@ -252,8 +319,11 @@ new Chart(cGC,{type:'line',data:{labels:d,datasets:[{label:'M',data:gc,borderCol
 const ep=['PL-010','PL-011','PL-012','PL-013','PL-014','PL-015','PL-016','PL-017','PL-018','PL-019'];
 new Chart(cL,{data:{labels:ep,datasets:[{type:'bar',label:'Vistas',data:[349,1100,2384,3325,2022,1791,1518,1810,1466,518],backgroundColor:A,yAxisID:'y'},{type:'line',label:'% visto',data:[8.5,25.3,30.1,30.2,21.1,25.5,26.1,27.2,24.8,10],borderColor:F,backgroundColor:F,yAxisID:'y1',tension:.3}]},options:{maintainAspectRatio:false,scales:{y:{position:'left'},y1:{position:'right',min:0,max:35,grid:{display:false}}}}});
 new Chart(cGu,{type:'bar',data:{labels:ep,datasets:[{label:'Guardados',data:[2,6,2,15,5,3,7,9,5,3],backgroundColor:T}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+new Chart(cEsf,{type:'doughnut',data:{labels:['Producir Contenido','Dirección (la oficina)','Lingo (PL-021)'],datasets:[{data:[88.9,54.8,134.1],backgroundColor:[A,T,F]}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+new Chart(cFal,{type:'bar',data:{labels:['Sin Chrome','Sin registro','Sin medir gasto','Atorado sin dueño','Doc. vieja'],datasets:[{data:[8,2,4,2,3],backgroundColor:[F,F,T,T,'#8a8178']}]},options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false}}}});
 new Chart(cGL,{type:'bar',data:{labels:['27-oct','28-oct','29-oct','30-oct'],datasets:[{label:'M',data:[19.9,60.6,50.3,3.3],backgroundColor:F}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
 let t='oficina';try{t=localStorage.getItem('tab')||'oficina'}catch(e){}
+const hs=(location.hash||'').slice(1);if(W[hs])t=hs;
 charts();(document.querySelector(`#tabs [data-t="${t}"]`)||document.querySelector('#tabs button')).click();
 </script>
 </body>
