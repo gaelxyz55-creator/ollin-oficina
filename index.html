@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OLLIN · Oficina de agentes</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--fuego:#A63A2B;--agua:#2F8F83;--tierra:#D49A3A;--aire:#F2EBDD;--obs:#141414;--bg:#F2EBDD;--fg:#141414;--card:#fffaf1;--line:#e2d6c2;--mute:#6b6257}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141414;--fg:#F2EBDD;--card:#1e1c1a;--line:#36312b;--mute:#a59a8b}}
+:root[data-theme="dark"]{--bg:#141414;--fg:#F2EBDD;--card:#1e1c1a;--line:#36312b;--mute:#a59a8b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:18px 16px 0;max-width:1180px;margin:auto}
+h1{margin:0;font-size:22px;letter-spacing:.5px}h1 b{color:var(--fuego)}
+.sub{color:var(--mute);font-size:13px}
+nav{display:flex;gap:6px;flex-wrap:wrap;max-width:1180px;margin:14px auto 0;padding:0 16px}
+nav button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:8px 14px;border-radius:20px;cursor:pointer;font-weight:600}
+nav button.on{background:var(--fuego);border-color:var(--fuego);color:#fff}
+.wrap{max-width:1180px;margin:auto;padding:16px;display:grid;grid-template-columns:1fr 290px;gap:16px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+section{display:none}section.on{display:block}
+h2{font-size:18px;margin:22px 0 8px;color:var(--fuego)}h2:first-child{margin-top:0}
+h3{font-size:14px;margin:0 0 6px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.k{font-size:26px;font-weight:800}.k.r{color:var(--fuego)}.k.g{color:var(--agua)}.k.t{color:var(--tierra)}
+.s{font-size:12px;color:var(--mute)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0}
+.n{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--agua);border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600}
+.n.bad{border-left-color:var(--fuego)}.n.mid{border-left-color:var(--tierra)}
+.ar{color:var(--mute);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--mute);font-weight:600}
+.tag{display:inline-block;padding:1px 7px;border-radius:9px;font-size:11px;font-weight:700;color:#fff}
+.ok{background:var(--agua)}.no{background:var(--fuego)}.md{background:var(--tierra)}.gr{background:#8a8178}
+.chart{position:relative;height:240px}
+aside{position:sticky;top:10px;align-self:start;max-height:calc(100vh - 20px);overflow:auto}
+aside .card{padding:10px}
+.why{border-left:3px solid var(--tierra);padding:4px 8px;margin:6px 0;font-size:12.5px}
+.why.c{border-left-color:var(--agua)}
+.who{font-weight:800;font-size:11px;letter-spacing:.5px}
+.funnel div{margin:3px auto;text-align:center;color:#fff;font-weight:700;padding:7px;border-radius:6px;font-size:13px}
+.pyr div{margin:3px auto;text-align:center;padding:7px;border-radius:6px;font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--line)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:700px){.two{grid-template-columns:1fr}}
+.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}@media(max-width:600px){.loop{grid-template-columns:1fr 1fr}}
+.loop div{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--tierra);border-radius:8px;padding:8px;font-size:12.5px}
+footer{max-width:1180px;margin:auto;padding:0 16px 30px;color:var(--mute);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+<h1><b>OLLIN</b> · Oficina de agentes</h1>
+<div class="sub">Gael García · Monterrey · datos al 3-nov-2026 · cifras con fuente en la carpeta OLLIN; lo que no se midió dice «hueco»</div>
+</header>
+<nav id="tabs">
+<button data-t="oficina" class="on">Oficina</button>
+<button data-t="contenido">Contenido</button>
+<button data-t="lingo">Lingo</button>
+<button data-t="cambios">Cambios</button>
+</nav>
+<div class="wrap">
+<main>
+
+<!-- ============ OFICINA ============ -->
+<section id="oficina" class="on">
+<h2>¿Qué es un agente?</h2>
+<div class="flow"><span class="n">Instrucción</span><span class="ar">+</span><span class="n">Herramientas</span><span class="ar">+</span><span class="n">Un trabajo con dueño</span><span class="ar">=</span><span class="n mid">Agente</span></div>
+<div class="grid">
+<div class="card"><h3>Dónde vive</h3>En una <b>tarea programada</b> (corre sola a su hora), en un <b>chat</b> (trabaja contigo) o en un <b>AGENTE.md</b> (su manual).</div>
+<div class="card"><h3>Por qué existe</h3>Una persona no cubre las 7 áreas del marketing. Cada agente hace una sola y deja huella.</div>
+<div class="card"><h3>Cómo se sabe que trabajó</h3>Por su <b>huella</b>: bitácora, archivo o pregunta en tu bandeja. «Corrió» no prueba nada.</div>
+</div>
+
+<h2>¿Por qué una oficina?</h2>
+<div class="two">
+<div class="card"><h3>Sin oficina</h3><div class="flow"><span class="n bad">Chat 1</span><span class="n bad">Chat 2</span><span class="n bad">Chat 3</span></div><div class="s">Se pierde, se olvida, no se ve el avance.</div></div>
+<div class="card"><h3>Con oficina</h3><div class="flow"><span class="n">Todos los agentes</span><span class="ar">→</span><span class="n">Una página en vivo</span><span class="ar">→</span><span class="n mid">Tu bandeja</span></div><div class="s">Ves quién trabaja, qué entregó y qué espera tu sí.</div></div>
+</div>
+
+<h2>Dónde vive el ecosistema</h2>
+<div class="flow"><span class="n mid">Claude · el cerebro ($1,800 al mes)</span></div>
+<div class="grid">
+<div class="card"><h3>Oficina</h3>Página con base de datos: agentes, bandeja, bitácora, gasto.</div>
+<div class="card"><h3>Laptop</h3>Carpeta OLLIN y my-video: hojas, piezas, videos, herramientas.</div>
+<div class="card"><h3>Chrome</h3>Facebook e Instagram: publicar y medir. <span class="tag no">falla n.º 1</span></div>
+<div class="card"><h3>Obsidian</h3>3 cerebros: OLLIN, Contenido y Lingo.</div>
+<div class="card"><h3>GitHub</h3>Respaldo privado y páginas que abren sin cuenta.</div>
+</div>
+
+<h2>¿Dónde más podría vivir?</h2>
+<table>
+<tr><th>Opción</th><th>Costo</th><th>Trabajo para ti</th><th>Corre sin tu laptop</th><th></th></tr>
+<tr><td><b>Claude (hoy)</b></td><td>Fijo $1,800/mes</td><td>Bajo</td><td>A medias (Chrome y carpeta)</td><td><span class="tag ok">se queda</span></td></tr>
+<tr><td>Automatizador (n8n, Make) + API</td><td>Paga por uso</td><td>Alto: armar cada flujo</td><td>Sí</td><td><span class="tag gr">después</span></td></tr>
+<tr><td>Servidor propio con agentes</td><td>Servidor + API</td><td>Muy alto</td><td>Sí</td><td><span class="tag gr">no aún</span></td></tr>
+</table>
+<div class="s">Hoy conviene Claude: costo fijo y nada que programar. Se revisa cuando haya 3 paquetes vendidos al mes (punto de equilibrio).</div>
+
+<h2>Cómo funciona</h2>
+<div class="flow"><span class="n">Tarea a su hora</span><span class="ar">→</span><span class="n">Lee la oficina</span><span class="ar">→</span><span class="n">Trabaja</span><span class="ar">→</span><span class="n">Deja huella</span><span class="ar">→</span><span class="n mid">Pregunta en tu bandeja</span><span class="ar">→</span><span class="n mid">Tú: sí / corrige</span><span class="ar">→</span><span class="n">El chat aplica</span></div>
+<h3 style="margin-top:12px">El reloj de la semana</h3>
+<table>
+<tr><th>Cuándo</th><th>Quién</th><th>Qué</th></tr>
+<tr><td>L-V 8:47</td><td>ANALISTA</td><td>Alertas de gasto y de Chrome (plan B)</td></tr>
+<tr><td>Diario 9:41</td><td>SUPERVISOR</td><td>Mide los Reels de Lingo</td></tr>
+<tr><td>Lunes 10:17</td><td>CRÍTICO</td><td>Cuestiona a los agentes y propone ajustes</td></tr>
+<tr><td>L-V 12:30</td><td>DIFUSIÓN</td><td>Publica en tu Facebook</td></tr>
+<tr><td>L-V 17:41</td><td>ANALISTA</td><td>Gasto del día</td></tr>
+<tr><td>Viernes 16:53</td><td>ORGANIZADOR</td><td>Cierre semanal, ROI y documentación</td></tr>
+<tr><td>Cuando escribes</td><td>JEFE de guardia</td><td>Contesta si no hay chat abierto</td></tr>
+</table>
+
+<h2>Los sistemas que usamos y por qué existen</h2>
+<div class="pyr">
+<div style="width:38%;border-color:var(--fuego)"><b>Meta única</b> · sin meta todo dato parece importante</div>
+<div style="width:52%">3 números por piso · el tablero que se ve en 1 vistazo</div>
+<div style="width:66%">Embudo · en qué paso se pierde la gente</div>
+<div style="width:80%">Diagrama de flujo + dueño de cada cosa · dónde se atora y de quién es</div>
+<div style="width:94%">Ciclo semanal (planear → hacer → medir → ajustar) + auditoría independiente</div>
+</div>
+<div class="s" style="text-align:center">De lo general (arriba) a lo específico (abajo). Un dato que no mueve la meta no se mide.</div>
+
+<h2>El ciclo que evoluciona a los agentes</h2>
+<div class="loop"><div><b>Planear</b><br>CRÍTICO propone 1 ajuste por piso (lunes)</div><div><b>Hacer</b><br>El chat del piso lo aplica</div><div><b>Medir</b><br>ANALISTA y cierre del viernes</div><div><b>Ajustar</b><br>¿Funcionó? Se queda o se regresa</div></div>
+
+<h2>Lo que dicen los datos</h2>
+<div class="grid">
+<div class="card"><div class="k">25</div><div class="s">agentes en 2 pisos (14 Contenido · 11 Lingo)</div></div>
+<div class="card"><div class="k t">7</div><div class="s">tareas que corren solas</div></div>
+<div class="card"><div class="k r">278 M</div><div class="s">tokens medidos del 23-oct al 3-nov</div></div>
+<div class="card"><div class="k r">0 de 5</div><div class="s">publicaciones que DIFUSIÓN subió sola (sin Chrome)</div></div>
+</div>
+<div class="card" style="margin-top:10px"><h3>Tokens por día y por piso (millones)</h3><div class="chart"><canvas id="cGasto"></canvas></div><div class="s">Lingo gastó 111 M en 2 días en un solo episodio (PL-021). Contenido incluye los chats de dirección.</div></div>
+<div class="card" style="margin-top:10px"><h3>¿Cada agente mide su crecimiento?</h3><div class="chart" style="height:180px"><canvas id="cCrec"></canvas></div></div>
+</section>
+
+<!-- ============ CONTENIDO ============ -->
+<section id="contenido">
+<h2>Contenido para negocios · meta: vender</h2>
+<div class="grid">
+<div class="card"><div class="k r">0</div><div class="s">ventas pagadas</div></div>
+<div class="card"><div class="k r">vacío</div><div class="s">registro de mensajes y cotizaciones</div></div>
+<div class="card"><div class="k">2</div><div class="s">trabajos entregados a negocios reales</div></div>
+<div class="card"><div class="k g">$600</div><div class="s">paquete completo (37 piezas en 7 días) · chico $350 · arranque $350</div></div>
+</div>
+
+<h2>El embudo</h2>
+<div class="funnel">
+<div style="width:96%;background:var(--agua)">9 publicaciones en tu Facebook</div>
+<div style="width:78%;background:var(--agua)">Anuncio: $32 → 104 visitas</div>
+<div style="width:58%;background:var(--fuego)">Mensajes: 0 (anuncio) · resto: hueco</div>
+<div style="width:42%;background:var(--fuego)">Cotizaciones: hueco</div>
+<div style="width:28%;background:var(--fuego)">Ventas: 0</div>
+</div>
+<div class="s" style="text-align:center">Se atora en el mensaje. Sin el registro no se sabe por qué: es tu tarea n.º 1.</div>
+
+<h2>Cómo fluye una pieza</h2>
+<div class="flow"><span class="n">CLIENTE · NEGOCIO</span><span class="ar">→</span><span class="n">OFERTA</span><span class="ar">→</span><span class="n">DISEÑADORA / CONTENIDO</span><span class="ar">→</span><span class="n bad">VERIFICADOR</span><span class="ar">→</span><span class="n mid">Tu sí</span><span class="ar">→</span><span class="n bad">DIFUSIÓN</span><span class="ar">→</span><span class="n bad">VENTA · registro</span></div>
+<div class="s">En rojo: donde se atora (VERIFICADOR sin trabajar desde el 20-oct; DIFUSIÓN sin Chrome; registro vacío).</div>
+
+<div class="two" style="margin-top:10px">
+<div class="card"><h3>Calendario: 39 piezas</h3><div class="chart"><canvas id="cCal"></canvas></div></div>
+<div class="card"><h3>Tokens por día (millones)</h3><div class="chart"><canvas id="cGC"></canvas></div></div>
+</div>
+
+<h2>Los agentes</h2>
+<table id="tC"></table>
+</section>
+
+<!-- ============ LINGO ============ -->
+<section id="lingo">
+<h2>Packaging Lingo · meta: más audiencia</h2>
+<div class="grid">
+<div class="card"><div class="k g">3,325</div><div class="s">vistas del mejor episodio (PL-013)</div></div>
+<div class="card"><div class="k r">518</div><div class="s">vistas de PL-019 a 7 días</div></div>
+<div class="card"><div class="k r">30 → 10 %</div><div class="s">% visto: de los mejores a PL-019</div></div>
+<div class="card"><div class="k t">9</div><div class="s">rondas de PL-021 (tope nuevo: 3)</div></div>
+</div>
+<div class="card" style="margin-top:10px"><h3>Vistas y % visto por episodio</h3><div class="chart" style="height:280px"><canvas id="cL"></canvas></div><div class="s">Los episodios con más % visto son los de más vistas: el gancho manda. 9 de cada 10 vistas son de no seguidores.</div></div>
+
+<h2>Cómo se hace un episodio</h2>
+<div class="flow"><span class="n">GUIONISTA</span><span class="ar">→</span><span class="n">STORYTELLER</span><span class="ar">→</span><span class="n">IMÁGENES</span><span class="ar">→</span><span class="n">VOZ</span><span class="ar">→</span><span class="n">SONIDO</span><span class="ar">→</span><span class="n mid">ANIMADOR (rondas)</span><span class="ar">→</span><span class="n">REVISORES</span><span class="ar">→</span><span class="n bad">EMPACADOR</span><span class="ar">→</span><span class="n">Publicar</span><span class="ar">→</span><span class="n mid">SUPERVISOR mide</span></div>
+<div class="s">EMPACADOR atorado desde el 28-oct (falta abrir el PR de PL-021). PL-020 y PL-021 sin publicar.</div>
+
+<div class="two" style="margin-top:10px">
+<div class="card"><h3>Guardados por episodio</h3><div class="chart"><canvas id="cGu"></canvas></div></div>
+<div class="card"><h3>Tokens por día (millones)</h3><div class="chart"><canvas id="cGL"></canvas></div></div>
+</div>
+
+<h2>Los agentes</h2>
+<table id="tL"></table>
+</section>
+
+<!-- ============ CAMBIOS ============ -->
+<section id="cambios">
+<h2>3-nov: de la auditoría a los ajustes</h2>
+<div class="flow"><span class="n mid">Pediste: «se está descarrilando»</span><span class="ar">→</span><span class="n">Raíz: por qué existen los sistemas</span><span class="ar">→</span><span class="n">Auditoría con datos</span><span class="ar">→</span><span class="n">8 decisiones</span><span class="ar">→</span><span class="n">Ajustes aplicados</span><span class="ar">→</span><span class="n">Este documento</span></div>
+
+<h2>Antes y después</h2>
+<table>
+<tr><th>Qué</th><th>Antes</th><th>Ahora</th><th>De quién</th></tr>
+<tr><td>Qué se mide</td><td>Todo, sin meta</td><td>Meta + 3 números por piso</td><td>Claude</td></tr>
+<tr><td>Quién cuestiona</td><td>Nadie (el INVESTIGADOR buscaba herramientas)</td><td>CRÍTICO cada lunes: 4 preguntas con datos</td><td>Gael pidió · Claude diseñó</td></tr>
+<tr><td>Quién decide</td><td>Sólo tú, pregunta por pregunta</td><td>1 pregunta por semana; 48 h sin respuesta = se aplica lo reversible</td><td>Claude</td></tr>
+<tr><td>Sin Chrome</td><td>La tarea se atoraba días</td><td>Alerta 8:47; a los 2 días lo hace el chat (plan B)</td><td>Claude</td></tr>
+<tr><td>Rondas de Lingo</td><td>Sin tope (PL-021: 9)</td><td>Tope de 3 y revisar gancho antes</td><td>Claude</td></tr>
+<tr><td>Agentes sin trabajo</td><td>VIDEASTA (24-oct), INVESTIGADOR Lingo (21-oct)</td><td>Juntados con CONTENIDO y GUIONISTA</td><td>Claude</td></tr>
+<tr><td>Registro de ventas</td><td>Vacío</td><td>Tu tarea n.º 1</td><td>Claude</td></tr>
+<tr><td>Documentación</td><td>Sin dueño (OLLIN del 18-oct)</td><td>Dueño: cierre del viernes · revisa: CRÍTICO</td><td>Gael (sí 3-nov)</td></tr>
+<tr><td>Lingo en dirección</td><td>Prohibido</td><td>Se lee y se ajusta; nada de otros proyectos en su GitHub</td><td>Gael</td></tr>
+</table>
+
+<h2>Las preguntas que hiciste y su respuesta</h2>
+<table>
+<tr><th>Pregunta</th><th>Respuesta</th></tr>
+<tr><td>¿Qué agentes no sirven?</td><td>DIFUSIÓN (0 de 5 sola), VERIFICADOR (sin trabajar), EMPACADOR (atorado), VIDEASTA e INVESTIGADOR (sin trabajo)</td></tr>
+<tr><td>¿En qué gastan de más?</td><td>Rondas de Lingo (111 M en 2 días) y chats largos que releen la plática</td></tr>
+<tr><td>¿Qué información está vieja?</td><td>Documentación de OLLIN (18-oct), de Lingo (30-sep), hoja 03 de la oferta (28-oct)</td></tr>
+<tr><td>¿Si las programadas fallan?</td><td>Plan B: el chat del piso lo hace contigo</td></tr>
+<tr><td>¿Quién decide los ajustes?</td><td>El CRÍTICO propone con datos; tú das sí o no una vez por semana</td></tr>
+<tr><td>¿Se analizó bien la competencia?</td><td>No: se vieron 3 en la web, sin método. Pendiente para el primer lunes del CRÍTICO</td></tr>
+<tr><td>¿Necesitamos otro agente?</td><td>Sí, uno: el CRÍTICO. Reemplaza a otro, no suma</td></tr>
+</table>
+</section>
+</main>
+
+<aside><div class="card"><h3>¿Por qué existe cada cosa?</h3><div class="s">Naranja: lo pediste tú · Verde: lo decidió Claude</div><div id="why"></div></div></aside>
+</div>
+<footer>OLLIN · presentación 3-nov-2026 · fuente: oficina, tareas programadas, REELS.csv y AUDITORIA SISTEMA 2026-11-03.md</footer>
+
+<script>
+const W={
+oficina:[["g","Una oficina visual","«En los chats me pierdo y no veo el avance» (19-oct)."],["g","Agentes en su cuarto","Sólo se mueven cuando trabajan; si no, confunde (23-oct)."],["g","Medir los tokens","Saber qué gasta y cómo gastar menos (22-oct)."],["g","Un chat por piso","Que cada chat hable sólo de su proyecto (19-oct)."],["c","Claude como cerebro","Costo fijo y nada que programar; otras opciones piden armar flujos."],["c","La huella como prueba","Una tarea que dice «corrió» puede no haber hecho nada."],["g","Alguien que cuestione","«No quiero que todo dependa de mí» (3-nov)."]],
+contenido:[["g","Precios $600 / $350","Aprobados el 28-oct; mitad al empezar, mitad al entregar."],["g","Producto real","Tras burlas por verse IA, sólo negocios y comida reales (29-oct)."],["g","No pausar","«Enderezar la flecha»: seguir y ajustar con datos (3-nov)."],["c","Meta: ventas","Lo único que paga el proyecto; lo demás es medio."],["c","Registro n.º 1","Sin él no hay embudo ni ROI."],["c","VERIFICADOR obligatorio","Salieron 14 anuncios sin revisar."]],
+lingo:[["g","Lingo dentro de OLLIN","Se lee y se ajusta desde dirección (3-nov)."],["g","Personas animadas","Le gustan más que las realistas (28-oct)."],["c","Meta: audiencia","Es lo que mide si la serie crece."],["c","Tope de 3 rondas","PL-021 llevó 9 rondas y 111 M en 2 días."],["c","Revisar el gancho","Los de 30 % visto son los de más vistas."]],
+cambios:[["g","Auditar antes de documentar","Eligió: auditar → ajustar → documentar (3-nov)."],["g","Página sin cuenta","Para presentarlo sin pedir inicio de sesión."],["c","CRÍTICO en lugar del INVESTIGADOR","Una tarea menos, no una más."],["c","48 h y se aplica","Para no depender de que tengas tiempo."],["c","Plan B sin Chrome","Es la causa n.º 1 de las fallas."]]};
+function why(t){document.getElementById('why').innerHTML=W[t].map(([w,a,b])=>`<div class="why ${w=='c'?'c':''}"><span class="who" style="color:${w=='c'?'var(--agua)':'var(--tierra)'}">${w=='c'?'CLAUDE':'GAEL'}</span> · <b>${a}</b><br>${b}</div>`).join('')}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tabs button,section').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById(b.dataset.t).classList.add('on');why(b.dataset.t);try{localStorage.setItem('tab',b.dataset.t)}catch(e){}});
+const AC=[["DIFUSIÓN","atorado","Publica en Facebook","0 de 5 solas"],["VERIFICADOR","libre","Revisa antes de entregar","sin trabajar desde 20-oct"],["DISEÑADORA / CONTENIDO","listo","Hace las piezas","9 publicadas"],["OFERTA","listo","Precios y paquetes","62 % de sí"],["CLIENTE","listo","Prospectos","registro vacío"],["NEGOCIO","listo","Meta de ventas","0 de 1.33 por semana"],["VENTA","listo","Cobra y registra","sin medida"],["ANALISTA","listo","Gasto y alertas","2 de 2 a tiempo"],["ORGANIZADOR","listo","Cierre del viernes","hecho 30-oct"],["CRÍTICO","nuevo","Cuestiona y propone","desde 9-nov"],["JEFE","listo","Dirige el piso","31 sí · 12 corrige"],["VIDEASTA","juntado","Videos","con CONTENIDO"]];
+const AL=[["SUPERVISOR","listo","Mide los Reels","48 h de PL-019 perdida"],["GUIONISTA","listo","Guion","PL-021 listo"],["STORYTELLER","listo","Rótulos","PL-021"],["IMÁGENES","listo","Flow","PL-021"],["VOZ","listo","Voz","PL-021 (106 s)"],["SONIDO","listo","Efectos","33 efectos"],["ANIMADOR","listo","Remotion","9 rondas"],["REVISORES","listo","Revisión","PL-021 r2"],["EMPACADOR","atorado","Sube al repo","falta el PR"],["MOTION","espera","Motion graphics","espera tu revisión"],["INVESTIGADOR","juntado","Investigación","con GUIONISTA"]];
+const tg=e=>({atorado:'no',libre:'no',juntado:'gr',nuevo:'md',espera:'md'}[e]||'ok');
+function tab(id,a){document.getElementById(id).innerHTML='<tr><th>Agente</th><th>Estado</th><th>Hace</th><th>Dato</th></tr>'+a.map(r=>`<tr><td><b>${r[0]}</b></td><td><span class="tag ${tg(r[1])}">${r[1]}</span></td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('')}
+tab('tC',AC);tab('tL',AL);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function charts(){if(!window.Chart)return;Chart.defaults.color=css('--mute');Chart.defaults.borderColor=css('--line');
+const F=css('--fuego'),A=css('--agua'),T=css('--tierra');
+const d=['23-oct','24-oct','26-oct','27-oct','28-oct','29-oct','30-oct','3-nov'];
+const gc=[21.2,21.6,8.7,28.5,23.7,16.4,12.3,12.6],gl=[0,0,0,19.9,60.6,50.3,3.3,0];
+new Chart(cGasto,{type:'bar',data:{labels:d,datasets:[{label:'Contenido + dirección',data:gc,backgroundColor:A},{label:'Lingo',data:gl,backgroundColor:F}]},options:{maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true}}}});
+new Chart(cCrec,{type:'bar',data:{labels:['Contenido','Lingo'],datasets:[{label:'Miden su crecimiento',data:[9,2],backgroundColor:A},{label:'No lo miden',data:[5,9],backgroundColor:F}]},options:{indexAxis:'y',maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true}}}});
+new Chart(cCal,{type:'doughnut',data:{labels:['Publicadas','Listas','Pausadas','Quitadas','Por producir'],datasets:[{data:[9,8,13,6,3],backgroundColor:[A,T,'#8a8178',F,'#c9bba5']}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});
+new Chart(cGC,{type:'line',data:{labels:d,datasets:[{label:'M',data:gc,borderColor:A,backgroundColor:A,tension:.3}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+const ep=['PL-010','PL-011','PL-012','PL-013','PL-014','PL-015','PL-016','PL-017','PL-018','PL-019'];
+new Chart(cL,{data:{labels:ep,datasets:[{type:'bar',label:'Vistas',data:[349,1100,2384,3325,2022,1791,1518,1810,1466,518],backgroundColor:A,yAxisID:'y'},{type:'line',label:'% visto',data:[8.5,25.3,30.1,30.2,21.1,25.5,26.1,27.2,24.8,10],borderColor:F,backgroundColor:F,yAxisID:'y1',tension:.3}]},options:{maintainAspectRatio:false,scales:{y:{position:'left'},y1:{position:'right',min:0,max:35,grid:{display:false}}}}});
+new Chart(cGu,{type:'bar',data:{labels:ep,datasets:[{label:'Guardados',data:[2,6,2,15,5,3,7,9,5,3],backgroundColor:T}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+new Chart(cGL,{type:'bar',data:{labels:['27-oct','28-oct','29-oct','30-oct'],datasets:[{label:'M',data:[19.9,60.6,50.3,3.3],backgroundColor:F}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
+let t='oficina';try{t=localStorage.getItem('tab')||'oficina'}catch(e){}
+charts();(document.querySelector(`#tabs [data-t="${t}"]`)||document.querySelector('#tabs button')).click();
+</script>
+</body>
+</html>
