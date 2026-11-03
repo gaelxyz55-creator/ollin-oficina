@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mis tareas · Gael</title>
+<style>
+:root{--fuego:#A63A2B;--agua:#2F8F83;--tierra:#D49A3A;--bg:#F2EBDD;--fg:#141414;--card:#fffaf1;--line:#e2d6c2;--mute:#6b6257}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141414;--fg:#F2EBDD;--card:#1e1c1a;--line:#36312b;--mute:#a59a8b}}
+:root[data-theme="dark"]{--bg:#141414;--fg:#F2EBDD;--card:#1e1c1a;--line:#36312b;--mute:#a59a8b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,-apple-system,Segoe UI,sans-serif}
+.w{max-width:620px;margin:auto;padding:18px 16px 40px}
+h1{margin:0;font-size:24px}h1 b{color:var(--fuego)}
+.meta{display:flex;gap:8px;margin:12px 0 4px;flex-wrap:wrap}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-size:13px;font-weight:600}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:10px 0 4px}.bar i{display:block;height:100%;background:var(--agua);width:0;transition:width .3s}
+.s{font-size:13px;color:var(--mute)}
+h2{font-size:15px;letter-spacing:.6px;text-transform:uppercase;margin:24px 0 8px;color:var(--fuego)}
+label.t{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--tierra);border-radius:12px;padding:12px;margin:8px 0;cursor:pointer}
+label.t.k{border-left-color:var(--fuego)}
+label.t input{width:24px;height:24px;margin-top:2px;accent-color:var(--agua);flex:none}
+.ic{font-size:24px;line-height:1;flex:none}
+.tt{font-weight:700}
+.pq{font-size:13.5px;margin-top:3px}
+.dn{font-size:12.5px;color:var(--mute);margin-top:3px}
+label.t.done{opacity:.5}label.t.done .tt{text-decoration:line-through}
+footer{margin-top:26px;font-size:12px;color:var(--mute)}
+</style>
+</head>
+<body><div class="w">
+<h1><b>Mis tareas</b> · lo que sólo yo puedo hacer</h1>
+<div class="meta"><span class="pill">🎯 Meta al 16-nov: 1 venta</span><span class="pill">🎬 Lingo: 2 episodios arriba</span></div>
+<div class="bar"><i id="pb"></i></div><div class="s" id="pt"></div>
+<div id="list"></div>
+<footer>Al palomear se guarda en este celular. La lista la pone al día el chat de dirección · 3-nov-2026</footer>
+</div>
+<script>
+const T=[
+["Mañana · miércoles 4",[
+["k","🖥️","Prende la laptop y abre tus 2 Chrome","Así DIFUSIÓN publica y el SUPERVISOR mide solos.","Antes de las 9:40 · app de Claude abierta · Chrome de Facebook y Chrome Trabajo"],
+["","📱","Publica la pieza del día desde tu celular","5 de 5 publicaciones a tiempo.","El chat de Contenido te deja la imagen y el texto listos"],
+["k","📸","Toma fotos reales de la comida de tus 2 clientes","La muestra nueva lleva comida real: sin fotos no se puede hacer.","Pide permiso · luz de día, de arriba y completa · pásalas a la laptop: MATERIAL REAL"]]],
+["Jueves 5 y viernes 6",[
+["k","🎬","Lingo: abre el PR de PL-021 con el chat de Lingo","Sin eso PL-020 y PL-021 no se publican.","5 minutos · el chat te dice dónde dar clic"],
+["","👀","Revisa la muestra nueva de tu negocio","Que sea tan buena que nadie se pueda burlar.","El chat de Contenido te la enseña · contesta: queda o qué cambia"],
+["","🖨️","Imprime la muestra (cuando digas que queda)","Es lo que llevas en la mano a cada negocio.","Pide «tiro y retiro» · 1 prueba antes de imprimir todo"]]],
+["Semana 9 al 14",[
+["k","🚶","Visita 10 negocios con la muestra y la oferta de entrada","Es el único camino a la primera venta.","Pregunta: ¿qué te gustaría que te ayudara a vender más?"],
+["k","✍️","Anota cada visita en 3 renglones","Con sus palabras se ajusta la oferta.","Qué dijo · ¿te dio su WhatsApp? · ¿dejó tomar fotos? (si no hay laptop, mándate un WhatsApp)"],
+["","💬","Manda el mensaje de oferta a quien te dio su WhatsApp","Convierte la visita en cotización.","Texto listo del chat de Contenido · tú lo mandas"]]],
+["Lunes 16",[
+["","📊","Lee la revisión del CRÍTICO","Ver si llegamos a 1 venta y qué se ajusta.","1 sola pregunta: sí o no"]]]];
+let st={};try{st=JSON.parse(localStorage.getItem('tareas')||'{}')}catch(e){}
+const L=document.getElementById('list');
+L.innerHTML=T.map(([g,it],gi)=>`<h2>${g}</h2>`+it.map(([k,ic,t,p,d],i)=>{const id=gi+'-'+i;return `<label class="t ${k?'k':''} ${st[id]?'done':''}"><input type="checkbox" data-id="${id}" ${st[id]?'checked':''}><span class="ic">${ic}</span><span><div class="tt">${t}</div><div class="pq">${p}</div><div class="dn">${d}</div></span></label>`}).join('')).join('');
+function prog(){const all=L.querySelectorAll('input'),n=[...all].filter(x=>x.checked).length;document.getElementById('pb').style.width=(100*n/all.length)+'%';document.getElementById('pt').textContent=`${n} de ${all.length} hechas · rojo = lo más importante`}
+L.addEventListener('change',e=>{const id=e.target.dataset.id;st[id]=e.target.checked;e.target.closest('label').classList.toggle('done',e.target.checked);try{localStorage.setItem('tareas',JSON.stringify(st))}catch(x){}prog()});prog();
+</script>
+</body></html>
